@@ -2,9 +2,12 @@ package devices
 
 import (
 	"errors"
-	"fmt"
+	"math"
 	"strings"
 )
+
+const BITALINO_BATTERY_MIN_VALUE uint16 = 30
+const BITALINO_BATTERY_MAX_VALUE uint16 = 650
 
 type Bitalino struct {
 	SerialDevice
@@ -59,7 +62,13 @@ func (b *Bitalino) Battery() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		return uint8(status.Battery), nil
+		if status.Battery > BITALINO_BATTERY_MAX_VALUE {
+			status.Battery = BITALINO_BATTERY_MAX_VALUE
+		}
+		bat := status.Battery - BITALINO_BATTERY_MIN_VALUE
+		max := BITALINO_BATTERY_MAX_VALUE - BITALINO_BATTERY_MIN_VALUE
+		percent := math.Round((float64(bat) / float64(max)) * 100.0)
+		return uint8(percent), nil
 	}
 	return 0, errors.New("Cannot check battery while recording")
 }
@@ -126,6 +135,21 @@ func (b *Bitalino) setChannels(channels []uint8) error {
 	return errors.New("Cannot set channels rate while recording")
 }
 
+func (b *Bitalino) setBatteryThreshold(threshold uint8) error {
+	if threshold > 63 {
+		return errors.New("Battery threshold must be in the range of 0 to 63")
+	}
+
+	cmd := threshold << 2
+
+	_, err := b.Send([]byte{cmd})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (b *Bitalino) Initialize() error {
 	if b.recording == false {
 		version, err := b.Version()
@@ -135,6 +159,11 @@ func (b *Bitalino) Initialize() error {
 		}
 
 		b.version = version
+
+		if err := b.setBatteryThreshold(uint8(BITALINO_BATTERY_MIN_VALUE)); err != nil {
+			return err
+		}
+
 		return nil
 	}
 	return errors.New("Cannot initialize if already recording")
@@ -142,6 +171,7 @@ func (b *Bitalino) Initialize() error {
 
 func (b *Bitalino) Start() error {
 	if b.recording == false {
+
 		if err := b.setSampleRate(b.SamplingRate); err != nil {
 			return err
 		}
@@ -208,8 +238,6 @@ func (b *Bitalino) Status() (BitalinoStatus, error) {
 			if err != nil {
 				return BitalinoStatus{}, err
 			}
-
-			fmt.Println(buff)
 
 			packet_crc := buff[15] & 0x0F
 			buff[15] = buff[15] & 0xF0

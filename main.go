@@ -18,32 +18,41 @@ func PrintPorts() {
 	}
 }
 
-func main() {
-	PrintPorts()
-
+func PrintBitalinoInfo() error {
 	bitalino := devices.Bitalino{}
 	// err := bitalino.Connect("/dev/cu.BITalino-9D-70", 115200, 1000, []uint8{1, 2})
 	err := bitalino.Connect("/dev/cu.BITalino-6A-36", 115200, 1000, []uint8{1, 2})
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	err = bitalino.Initialize()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	version, err := bitalino.Version()
 	if err != nil {
-		panic(err)
+		return err
 	}
-	fmt.Println(version)
+	fmt.Println()
+	fmt.Printf("Version: %s", version)
 
 	battery, err := bitalino.Battery()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	fmt.Println(battery)
+	fmt.Printf("Battery: %d%%\n", battery)
+	return nil
+}
+
+func main() {
+	PrintPorts()
+
+	err := PrintBitalinoInfo()
+	if err != nil {
+		panic(err)
+	}
 }
