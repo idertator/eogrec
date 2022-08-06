@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/idertator/eogrec/devices"
+	"github.com/idertator/eogrec/models"
 )
 
 func PrintPorts() {
@@ -20,14 +21,13 @@ func PrintPorts() {
 
 func PrintBitalinoInfo() error {
 	bitalino := devices.Bitalino{}
-	// err := bitalino.Connect("/dev/cu.BITalino-9D-70", 115200, 1000, []uint8{1, 2})
-	err := bitalino.Connect("/dev/cu.BITalino-6A-36", 115200, 1000, []uint8{1, 2})
+	err := bitalino.Connect("/dev/cu.BITalino-9D-70", 115200, 1000)
 
 	if err != nil {
 		return err
 	}
 
-	err = bitalino.Initialize()
+	err = bitalino.Initialize(1, 2)
 	if err != nil {
 		return err
 	}
@@ -45,13 +45,59 @@ func PrintBitalinoInfo() error {
 	}
 
 	fmt.Printf("Battery: %d%%\n", battery)
-	return nil
+
+	return bitalino.Close()
+}
+
+func TestBitalinoDataFetching() error {
+	data := make([]models.Sample, 100)
+	fmt.Println("Fetching Data")
+
+	bitalino := devices.Bitalino{}
+	err := bitalino.Connect("/dev/cu.BITalino-9D-70", 115200, 1000)
+
+	if err != nil {
+		return err
+	}
+
+	err = bitalino.Initialize(1, 2)
+	if err != nil {
+		return err
+	}
+
+	err = bitalino.Start()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Here")
+
+	err = bitalino.Read(data, 100)
+	if err != nil {
+		return err
+	}
+
+	err = bitalino.Stop()
+	if err != nil {
+		return err
+	}
+
+	for idx, sample := range data {
+		fmt.Printf("%d -> %d (%d, %d)", idx, sample.Index, sample.Horizontal, sample.Vertical)
+	}
+
+	return bitalino.Close()
 }
 
 func main() {
 	PrintPorts()
 
-	err := PrintBitalinoInfo()
+	// err := PrintBitalinoInfo()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	err := TestBitalinoDataFetching()
 	if err != nil {
 		panic(err)
 	}

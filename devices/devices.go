@@ -1,15 +1,17 @@
 package devices
 
 import (
+	"github.com/idertator/eogrec/models"
 	"go.bug.st/serial"
 )
 
 type SerialDevice struct {
-	Port         string
-	Baudrate     uint32
-	SamplingRate uint16
-	Channels     []uint8
-	Serial       serial.Port
+	Port              string
+	Baudrate          uint32
+	SamplingRate      uint16
+	HorizontalChannel byte
+	VerticalChannel   byte
+	Serial            serial.Port
 }
 
 type Recordable interface {
@@ -20,19 +22,20 @@ type Recordable interface {
 	AvailableSampleRates() []uint16
 	AvailableChannels() []uint8
 
-	Initialize() error
+	Initialize(horizontalChannel byte, verticalChannel byte) error
 	Start() error
 	Stop() error
+	Read(samples []models.Sample, n uint32) error
+	Close() error
 
 	setSampleRate(rate uint16) error
 	setChannels(channels []uint8) error
 }
 
-func (s *SerialDevice) Connect(port string, baudrate uint32, rate uint16, channels []uint8) error {
+func (s *SerialDevice) Connect(port string, baudrate uint32, rate uint16) error {
 	s.Port = port
 	s.Baudrate = baudrate
 	s.SamplingRate = rate
-	s.Channels = channels
 
 	mode := &serial.Mode{
 		BaudRate: int(baudrate),

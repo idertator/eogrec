@@ -4,6 +4,8 @@ import (
 	"errors"
 	"math"
 	"strings"
+
+	"github.com/idertator/eogrec/models"
 )
 
 const BITALINO_BATTERY_MIN_VALUE uint16 = 30
@@ -14,6 +16,7 @@ type Bitalino struct {
 
 	version   string
 	recording bool
+	counter   uint32
 }
 
 type BitalinoStatus struct {
@@ -150,8 +153,11 @@ func (b *Bitalino) setBatteryThreshold(threshold uint8) error {
 	return nil
 }
 
-func (b *Bitalino) Initialize() error {
+func (b *Bitalino) Initialize(horizontalChannel byte, verticalChannel byte) error {
 	if b.recording == false {
+		b.HorizontalChannel = horizontalChannel
+		b.VerticalChannel = verticalChannel
+
 		version, err := b.Version()
 
 		if err != nil {
@@ -171,14 +177,16 @@ func (b *Bitalino) Initialize() error {
 
 func (b *Bitalino) Start() error {
 	if b.recording == false {
-
+		b.counter = 0
 		if err := b.setSampleRate(b.SamplingRate); err != nil {
 			return err
 		}
 
-		if err := b.setChannels(b.Channels); err != nil {
+		if err := b.setChannels([]byte{b.HorizontalChannel, b.VerticalChannel}); err != nil {
 			return err
 		}
+
+		b.recording = true
 
 		return nil
 	}
@@ -186,10 +194,55 @@ func (b *Bitalino) Start() error {
 }
 func (b *Bitalino) Stop() error {
 	if b.recording == true {
-		// TODO: Implement this
-		return nil
+		_, err := b.Send([]byte{0})
+		return err
+	} else {
+		if b.version != "v5.2" {
+			_, err := b.Send([]byte{255})
+			return err
+		}
 	}
 	return errors.New("Already stopped")
+}
+
+func (b *Bitalino) Read(samples []models.Sample, n uint32) error {
+	buff := make([]byte, 4)
+	var i uint32
+	for i = 0; i < n; i++ {
+		count, err := b.RecvN(buff, 4)
+		if err != nil {
+			return err
+		}
+		if count != 4 {
+			return errors.New("Packets must have 4 bytes")
+		}
+
+		packet_crc := buff[3] & 0x0F
+		buff[3] = buff[3] & 0xF0
+
+		computed_crc := CRC(buff, 4)
+
+		if packet_crc == (computed_crc & 0x0F) {
+			samples[i].Index = b.counter
+			samples[i].Horizontal = ((uint32(buff[2] & 0x0F)) << 6) | (uint32(buff[1] >> 2))
+			samples[i].Vertical = ((uint32(buff[1] & 0x03)) << 8) | uint32(buff[0])
+		} else {
+			samples[i].Index = 0xFFFFFFFF
+			samples[i].Horizontal = 0xFFFFFFFF
+			samples[i].Vertical = 0xFFFFFFFF
+		}
+
+		b.counter++
+	}
+	return nil
+}
+
+func (b *Bitalino) Close() error {
+	if b.recording {
+		b.Stop()
+	}
+	err := b.Serial.Close()
+	return err
 }
 
 // EndSection
