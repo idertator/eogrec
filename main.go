@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
 	"github.com/idertator/eogrec/devices"
+	"github.com/idertator/eogrec/formats"
 	"github.com/idertator/eogrec/models"
 )
 
@@ -60,6 +63,11 @@ func TestBitalinoDataFetching() error {
 		return err
 	}
 
+	record, err := formats.CreateRecord("./test.dat")
+	if err != nil {
+		return err
+	}
+
 	err = bitalino.Initialize(1, 2)
 	if err != nil {
 		return err
@@ -70,11 +78,16 @@ func TestBitalinoDataFetching() error {
 		return err
 	}
 
-	fmt.Println("Here")
+	for i := 0; i < 100; i++ {
+		err = bitalino.Read(data, 100)
+		if err != nil {
+			return err
+		}
 
-	err = bitalino.Read(data, 100)
-	if err != nil {
-		return err
+		err = record.AddSamples(data, 100)
+		if err != nil {
+			return err
+		}
 	}
 
 	err = bitalino.Stop()
@@ -82,23 +95,32 @@ func TestBitalinoDataFetching() error {
 		return err
 	}
 
-	for idx, sample := range data {
-		fmt.Printf("%d -> %d (%d, %d)", idx, sample.Index, sample.Horizontal, sample.Vertical)
+	err = record.Close()
+	if err != nil {
+		return err
 	}
 
 	return bitalino.Close()
 }
 
-func main() {
-	PrintPorts()
-
-	// err := PrintBitalinoInfo()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	err := TestBitalinoDataFetching()
+func PrintDataFile(filename string) error {
+	samples, err := formats.ReadRecord(filename)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	for _, sample := range samples {
+		fmt.Printf("%d %d %d\n", sample.Index, sample.Horizontal, sample.Vertical)
+	}
+
+	return nil
+}
+
+func main() {
+	app := app.New()
+
+	mainWindow := app.NewWindow("EogRec")
+	mainWindow.Resize(fyne.NewSize(640, 480))
+
+	mainWindow.ShowAndRun()
 }
