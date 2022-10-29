@@ -1,0 +1,109 @@
+!_TAG_FILE_FORMAT	2
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted/
+!_TAG_PROGRAM_AUTHOR	Joel Stemmer	/stemmertech@gmail.com/
+!_TAG_PROGRAM_NAME	gotags
+!_TAG_PROGRAM_URL	https://github.com/jstemmer/gotags
+!_TAG_PROGRAM_VERSION	1.4.1	/go1.19.2/
+A1	devices/bitalino.go	29;"	w	access:public	ctype:BitalinoStatus	line:29	type:uint16
+A2	devices/bitalino.go	30;"	w	access:public	ctype:BitalinoStatus	line:30	type:uint16
+A3	devices/bitalino.go	31;"	w	access:public	ctype:BitalinoStatus	line:31	type:uint16
+A4	devices/bitalino.go	32;"	w	access:public	ctype:BitalinoStatus	line:32	type:uint16
+A5	devices/bitalino.go	33;"	w	access:public	ctype:BitalinoStatus	line:33	type:uint16
+A6	devices/bitalino.go	34;"	w	access:public	ctype:BitalinoStatus	line:34	type:uint16
+AddSamples	formats/record.go	104;"	m	access:public	ctype:Record	line:104	signature:(samples []models.Sample, n uint32)	type:error
+AvailableChannels	devices/bitalino.go	83;"	m	access:public	ctype:Bitalino	line:83	signature:()	type:[]uint8
+AvailableChannels	devices/devices.go	23;"	m	access:public	line:23	ntype:Recordable	signature:()	type:[]uint8
+AvailableSampleRates	devices/bitalino.go	79;"	m	access:public	ctype:Bitalino	line:79	signature:()	type:[]uint16
+AvailableSampleRates	devices/devices.go	22;"	m	access:public	line:22	ntype:Recordable	signature:()	type:[]uint16
+BITALINO_BATTERY_MAX_VALUE	devices/bitalino.go	12;"	c	access:public	line:12	type:uint16
+BITALINO_BATTERY_MIN_VALUE	devices/bitalino.go	11;"	c	access:public	line:11	type:uint16
+Battery	devices/bitalino.go	27;"	w	access:public	ctype:BitalinoStatus	line:27	type:uint16
+Battery	devices/bitalino.go	62;"	m	access:public	ctype:Bitalino	line:62	signature:()	type:uint8, error
+Battery	devices/devices.go	20;"	m	access:public	line:20	ntype:Recordable	signature:()	type:uint8, error
+BatteryThreshold	devices/bitalino.go	28;"	w	access:public	ctype:BitalinoStatus	line:28	type:uint8
+Baudrate	devices/devices.go	10;"	w	access:public	ctype:SerialDevice	line:10	type:uint32
+Bitalino	devices/bitalino.go	14;"	t	access:public	line:14	type:struct
+BitalinoStatus	devices/bitalino.go	22;"	t	access:public	line:22	type:struct
+CRC	devices/bitalino.go	326;"	f	access:public	line:326	signature:(data []byte, n uint32)	type:byte
+Close	devices/bitalino.go	240;"	m	access:public	ctype:Bitalino	line:240	signature:()	type:error
+Close	devices/devices.go	29;"	m	access:public	line:29	ntype:Recordable	signature:()	type:error
+Close	formats/record.go	118;"	m	access:public	ctype:Record	line:118	signature:()	type:error
+Connect	devices/devices.go	35;"	m	access:public	ctype:SerialDevice	line:35	signature:(port string, baudrate uint32, rate uint16)	type:error
+Count	formats/record.go	13;"	w	access:public	ctype:RecordHeader	line:13	type:uint32
+CreateRecord	formats/record.go	22;"	f	access:public	ctype:Record	line:22	signature:(filename string)	type:*Record, error
+Filename	formats/record.go	17;"	w	access:public	ctype:Record	line:17	type:string
+Header	formats/record.go	18;"	w	access:public	ctype:Record	line:18	type:RecordHeader
+Horizontal	models/samples.go	5;"	w	access:public	ctype:Sample	line:5	type:uint32
+HorizontalChannel	devices/devices.go	12;"	w	access:public	ctype:SerialDevice	line:12	type:byte
+I1	devices/bitalino.go	23;"	w	access:public	ctype:BitalinoStatus	line:23	type:byte
+I2	devices/bitalino.go	24;"	w	access:public	ctype:BitalinoStatus	line:24	type:byte
+Index	models/samples.go	4;"	w	access:public	ctype:Sample	line:4	type:uint32
+Initialize	devices/bitalino.go	156;"	m	access:public	ctype:Bitalino	line:156	signature:(horizontalChannel byte, verticalChannel byte)	type:error
+Initialize	devices/devices.go	25;"	m	access:public	line:25	ntype:Recordable	signature:(horizontalChannel byte, verticalChannel byte)	type:error
+Name	devices/bitalino.go	39;"	m	access:public	ctype:Bitalino	line:39	signature:()	type:string
+Name	devices/devices.go	18;"	m	access:public	line:18	ntype:Recordable	signature:()	type:string
+O1	devices/bitalino.go	25;"	w	access:public	ctype:BitalinoStatus	line:25	type:byte
+O2	devices/bitalino.go	26;"	w	access:public	ctype:BitalinoStatus	line:26	type:byte
+Port	devices/devices.go	9;"	w	access:public	ctype:SerialDevice	line:9	type:string
+PortList	devices/devices.go	110;"	f	access:public	line:110	signature:()	type:[]string, error
+PrintBitalinoInfo	main.go	25;"	f	access:public	line:25	signature:()	type:error
+PrintDataFile	main.go	106;"	f	access:public	line:106	signature:(filename string)	type:error
+PrintPorts	main.go	13;"	f	access:public	line:13	signature:()
+Read	devices/bitalino.go	208;"	m	access:public	ctype:Bitalino	line:208	signature:(samples []models.Sample, n uint32)	type:error
+Read	devices/devices.go	28;"	m	access:public	line:28	ntype:Recordable	signature:(samples []models.Sample, n uint32)	type:error
+ReadRecord	formats/record.go	43;"	f	access:public	line:43	signature:(filename string)	type:[]models.Sample, error
+Record	formats/record.go	16;"	t	access:public	line:16	type:struct
+RecordHeader	formats/record.go	12;"	t	access:public	line:12	type:struct
+Recordable	devices/devices.go	17;"	n	access:public	line:17	type:interface
+Recv	devices/devices.go	65;"	m	access:public	ctype:SerialDevice	line:65	signature:(data []byte)	type:uint32, error
+RecvN	devices/devices.go	73;"	m	access:public	ctype:SerialDevice	line:73	signature:(data []byte, n uint32)	type:uint32, error
+RecvUntil	devices/devices.go	90;"	m	access:public	ctype:SerialDevice	line:90	signature:(data []byte, until byte)	type:uint32, error
+Sample	models/samples.go	3;"	t	access:public	line:3	type:struct
+SamplingRate	devices/devices.go	11;"	w	access:public	ctype:SerialDevice	line:11	type:uint16
+Send	devices/devices.go	57;"	m	access:public	ctype:SerialDevice	line:57	signature:(data []byte)	type:uint32, error
+Serial	devices/devices.go	14;"	w	access:public	ctype:SerialDevice	line:14	type:serial.Port
+SerialDevice	devices/bitalino.go	15;"	e	access:public	ctype:Bitalino	line:15	type:SerialDevice
+SerialDevice	devices/devices.go	8;"	t	access:public	line:8	type:struct
+Start	devices/bitalino.go	178;"	m	access:public	ctype:Bitalino	line:178	signature:()	type:error
+Start	devices/devices.go	26;"	m	access:public	line:26	ntype:Recordable	signature:()	type:error
+Status	devices/bitalino.go	252;"	m	access:public	ctype:Bitalino	line:252	signature:()	type:BitalinoStatus, error
+Stop	devices/bitalino.go	195;"	m	access:public	ctype:Bitalino	line:195	signature:()	type:error
+Stop	devices/devices.go	27;"	m	access:public	line:27	ntype:Recordable	signature:()	type:error
+TestBitalinoDataFetching	main.go	55;"	f	access:public	line:55	signature:()	type:error
+Version	devices/bitalino.go	43;"	m	access:public	ctype:Bitalino	line:43	signature:()	type:string, error
+Version	devices/devices.go	19;"	m	access:public	line:19	ntype:Recordable	signature:()	type:string, error
+Vertical	models/samples.go	6;"	w	access:public	ctype:Sample	line:6	type:uint32
+VerticalChannel	devices/devices.go	13;"	w	access:public	ctype:SerialDevice	line:13	type:byte
+WriteHeader	formats/record.go	85;"	m	access:public	ctype:Record	line:85	signature:()	type:error
+bytes	formats/record.go	4;"	i	line:4
+counter	devices/bitalino.go	19;"	w	access:private	ctype:Bitalino	line:19	type:uint32
+devices	devices/bitalino.go	1;"	p	line:1
+devices	devices/devices.go	1;"	p	line:1
+encoding/binary	formats/record.go	5;"	i	line:5
+errors	devices/bitalino.go	4;"	i	line:4
+errors	formats/record.go	6;"	i	line:6
+fmt	main.go	4;"	i	line:4
+formats	formats/record.go	1;"	p	line:1
+fyne.io/fyne/v2	main.go	6;"	i	line:6
+fyne.io/fyne/v2/app	main.go	7;"	i	line:7
+github.com/idertator/eogrec/devices	main.go	8;"	i	line:8
+github.com/idertator/eogrec/formats	main.go	9;"	i	line:9
+github.com/idertator/eogrec/models	devices/bitalino.go	8;"	i	line:8
+github.com/idertator/eogrec/models	devices/devices.go	4;"	i	line:4
+github.com/idertator/eogrec/models	formats/record.go	9;"	i	line:9
+github.com/idertator/eogrec/models	main.go	10;"	i	line:10
+go.bug.st/serial	devices/devices.go	5;"	i	line:5
+main	main.go	119;"	f	access:private	line:119	signature:()
+main	main.go	1;"	p	line:1
+math	devices/bitalino.go	5;"	i	line:5
+models	models/samples.go	1;"	p	line:1
+os	formats/record.go	7;"	i	line:7
+pointer	formats/record.go	19;"	w	access:private	ctype:Record	line:19	type:*os.File
+recording	devices/bitalino.go	18;"	w	access:private	ctype:Bitalino	line:18	type:bool
+setBatteryThreshold	devices/bitalino.go	141;"	m	access:private	ctype:Bitalino	line:141	signature:(threshold uint8)	type:error
+setChannels	devices/bitalino.go	111;"	m	access:private	ctype:Bitalino	line:111	signature:(channels []uint8)	type:error
+setChannels	devices/devices.go	32;"	m	access:private	line:32	ntype:Recordable	signature:(channels []uint8)	type:error
+setSampleRate	devices/bitalino.go	87;"	m	access:private	ctype:Bitalino	line:87	signature:(rate uint16)	type:error
+setSampleRate	devices/devices.go	31;"	m	access:private	line:31	ntype:Recordable	signature:(rate uint16)	type:error
+strings	devices/bitalino.go	6;"	i	line:6
+version	devices/bitalino.go	17;"	w	access:private	ctype:Bitalino	line:17	type:string

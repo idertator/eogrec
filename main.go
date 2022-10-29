@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"github.com/idertator/eogrec/devices"
 	"github.com/idertator/eogrec/formats"
+	"github.com/idertator/eogrec/gui"
 	"github.com/idertator/eogrec/models"
 )
 
@@ -24,7 +24,7 @@ func PrintPorts() {
 
 func PrintBitalinoInfo() error {
 	bitalino := devices.Bitalino{}
-	err := bitalino.Connect("/dev/cu.BITalino-9D-70", 115200, 1000)
+	err := bitalino.Connect("/dev/rfcomm0", 115200, 1000)
 
 	if err != nil {
 		return err
@@ -117,10 +117,11 @@ func PrintDataFile(filename string) error {
 }
 
 func main() {
+	// PrintBitalinoInfo()
 	app := app.New()
 
-	mainWindow := app.NewWindow("EogRec")
-	mainWindow.Resize(fyne.NewSize(640, 480))
+	mainWindow := gui.CreateMainWindow(app)
+	mainWindow.Show()
 
-	mainWindow.ShowAndRun()
+	app.Run()
 }
